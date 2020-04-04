@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+
+  - import_role:
+      name: wordpress
+    vars:
+      wp_url: https://www.rych.dev
+      wp_admin_email: rchouinard@gmail.com
+      wp_db_host: host.docker.internal:3306
+      wp_db_pass: zpg2UJqPph9aqCaB

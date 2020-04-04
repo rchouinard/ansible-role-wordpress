@@ -1,0 +1,37 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+
+  - name: Install sudo
+    package:
+      name: sudo
+      state: present
+
+  - name: Install php
+    package:
+      name:
+      - php-cli
+      - php-json
+      - php-pdo
+      - php-mysqlnd
+      state: present
+
+  - name: Install mysql client
+    package:
+      name: mariadb
+
+  - name: Create document root
+    file:
+      path: /var/www/html
+      owner: root
+      group: root
+      mode: 0755
+      recurse: yes
+      state: directory
+
+  - name: Create WordPress user
+    user:
+      name: wordpress
+      system: yes
+      state: present

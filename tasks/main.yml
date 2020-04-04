@@ -1,0 +1,16 @@
+---
+- import_tasks: wordpress-preflight.yml
+  tags:
+  - wordpress
+  - wordpress:preflight
+
+- import_tasks: wpcli-install.yml
+  tags:
+  - wordpress
+  - wordpress:wpcli
+  - wordpress:wpcli:install
+
+- import_tasks: wordpress-install.yml
+  tags:
+  - wordpress
+  - wordpress:install

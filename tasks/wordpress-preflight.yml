@@ -1,0 +1,31 @@
+---
+- name: Ensure WordPress user exists
+  command: "/usr/bin/getent passwd {{ wp_owner | quote }}"
+  ignore_errors: yes
+  failed_when: false
+  changed_when: false
+  register: user_check
+
+- fail:
+    msg: "User {{ wp_owner }} does not exist."
+  when: user_check is failed
+
+- name: Ensure WordPress group exists
+  command: "/usr/bin/getent group {{ wp_group | quote }}"
+  ignore_errors: yes
+  failed_when: false
+  changed_when: false
+  register: group_check
+
+- fail:
+    msg: "Group {{ wp_group }} does not exist."
+  when: group_check is failed
+
+- fail:
+    msg: "Value of wp_url cannot be blank."
+  when: not wp_url
+
+- fail:
+    msg: "Value of wp_admin_email cannot be blank."
+  when: not wp_admin_email
+

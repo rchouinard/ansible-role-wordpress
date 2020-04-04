@@ -1,0 +1,72 @@
+---
+- name: Create WordPress path
+  file:
+    path: "{{ wp_path }}"
+    owner: "{{ wp_owner }}"
+    group: "{{ wp_group }}"
+    mode: 0775
+    recurse: yes
+    state: directory
+
+- name: Download WordPress core
+  become: yes
+  become_user: "{{ wp_owner }}"
+  command:
+    cmd: >-
+      {{ wp_cli_path }} core download
+      --allow-root
+      --no-color
+      --path={{ wp_path | quote }}
+      --version={{ wp_version | quote }}
+      {{ "--skip-content" if wp_skip_content }}
+    creates: "{{ wp_path }}/wp-settings.php"
+
+- name: Create WordPress configuration file
+  become: yes
+  become_user: "{{ wp_owner }}"
+  command:
+    cmd: >-
+      {{ wp_cli_path }} config create
+      --allow-root
+      --no-color
+      --path={{ wp_path | quote }}
+      --dbname={{ wp_db_name | quote }}
+      --dbuser={{ wp_db_user | quote }}
+      --dbpass={{ wp_db_pass | quote }}
+      --dbhost={{ wp_db_host | quote }}
+      --dbprefix={{ wp_db_prefix | quote }}
+      --dbcharset={{ wp_db_charset | quote }}
+      {{ "--skip-check" if wp_db_skip_check }}
+    creates: "{{ wp_path }}/wp-config.php"
+
+- name: Check WordPress installation status
+  become: yes
+  become_user: "{{ wp_owner }}"
+  command:
+    cmd: >-
+      {{ wp_cli_path }} core is-installed
+      --allow-root
+      --no-color
+      --path={{ wp_path | quote }}
+  ignore_errors: yes
+  failed_when: false
+  changed_when: false
+  register: wp_install_check
+
+- name: Install WordPress
+  become: yes
+  become_user: "{{ wp_owner }}"
+  command:
+    cmd: >-
+      {{ wp_cli_path }} core install
+      --allow-root
+      --no-color
+      --path={{ wp_path | quote }}
+      --url={{ wp_url | quote }}
+      --title={{ wp_title | quote }}
+      --admin_user={{ wp_admin_user | quote }}
+      --admin_password={{ wp_admin_password | quote }}
+      --admin_email={{ wp_admin_email | quote }}
+      {{ "--skip-email" if wp_skip_email }}
+  when: not wp_skip_install and wp_install_check.rc != 0
+  run_once: yes

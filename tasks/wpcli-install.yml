@@ -1,0 +1,12 @@
+---
+- name: Check if wp-cli installed
+  stat:
+    path: "{{ wp_cli_path }}"
+  register: wpcli_check
+
+- name: Install wp-cli
+  get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: "{{ wp_cli_path }}"
+    mode: 0755
+  when: not wpcli_check.stat.exists

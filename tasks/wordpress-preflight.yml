@@ -1,31 +1,31 @@
 ---
-- name: Ensure WordPress user exists
-  command: "/usr/bin/getent passwd {{ wp_owner | quote }}"
-  ignore_errors: yes
+- name: Check user
+  command: /usr/bin/getent passwd {{ wp_owner | quote }}
   failed_when: false
   changed_when: false
   register: user_check
 
-- fail:
-    msg: "User {{ wp_owner }} does not exist."
-  when: user_check is failed
-
-- name: Ensure WordPress group exists
-  command: "/usr/bin/getent group {{ wp_group | quote }}"
-  ignore_errors: yes
+- name: Check group
+  command: /usr/bin/getent group {{ wp_group | quote }}
   failed_when: false
   changed_when: false
   register: group_check
 
-- fail:
-    msg: "Group {{ wp_group }} does not exist."
-  when: group_check is failed
+- name: Assert user {{ wp_owner }} exists
+  assert:
+    that: user_check.rc == 0
+    fail_msg: User {{ wp_owner }} does not exist on this system.
 
-- fail:
-    msg: "Value of wp_url cannot be blank."
-  when: not wp_url
+- name: Assert group {{ wp_group }} exists
+  assert:
+    that: group_check.rc == 0
+    fail_msg: Group {{ wp_group }} does not exist on this system.
 
-- fail:
-    msg: "Value of wp_admin_email cannot be blank."
-  when: not wp_admin_email
-
+- name: Assert required installation variables are set
+  assert:
+    that: (lookup("vars", item) is not none) and (lookup("vars", item) != "")
+    fail_msg: Required variable {{ item }} is not set.
+  loop:
+  - wp_url
+  - wp_admin_email
+  when: not wp_skip_install

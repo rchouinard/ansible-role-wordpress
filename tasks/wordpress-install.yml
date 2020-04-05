@@ -1,14 +1,13 @@
 ---
-- name: Create WordPress path
+- name: Create path
   file:
     path: "{{ wp_path }}"
     owner: "{{ wp_owner }}"
     group: "{{ wp_group }}"
-    mode: 0775
     recurse: yes
     state: directory
 
-- name: Download WordPress core
+- name: Download core ({{ wp_version }})
   become: yes
   become_user: "{{ wp_owner }}"
   command:
@@ -38,6 +37,7 @@
       --dbcharset={{ wp_db_charset | quote }}
       {{ "--skip-check" if wp_db_skip_check }}
     creates: "{{ wp_path }}/wp-config.php"
+  when: not wp_skip_config
 
 - name: Check WordPress installation status
   become: yes

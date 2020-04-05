@@ -23,7 +23,7 @@
 
 - name: Assert required installation variables are set
   assert:
-    that: (lookup("vars", item) is not none) and (lookup("vars", item) != "")
+    that: lookup("vars", item, default=False)
     fail_msg: Required variable {{ item }} is not set.
   loop:
   - wp_url

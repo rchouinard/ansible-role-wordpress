@@ -17,6 +17,6 @@ galaxy_info:
   galaxy_tags:
   - php
   - wordpress
-  - wp-cli
+  - wpcli
   - cms
 dependencies: []

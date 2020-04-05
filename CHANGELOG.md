@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 - General cleanup and enhancements to pre-flight step
+- Update Molecule to 3.0
 
 ## [0.1.0] - 2020-04-04
 ### Added

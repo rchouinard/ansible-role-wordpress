@@ -5,66 +5,18 @@ driver:
   name: docker
 platforms:
   - name: fedora-rawhide
-    image: fedora:rawhide
-    command: /sbin/init
-    environment:
-      container: docker
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-    capabilities:
-      - SYS_ADMIN
+    image: docker.io/fedora:rawhide
+    pre_build_image: true
   - name: fedora-31
-    image: fedora:31
-    command: /sbin/init
-    environment:
-      container: docker
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-    capabilities:
-      - SYS_ADMIN
+    image: docker.io/fedora:31
+    pre_build_image: true
   - name: fedora-30
-    image: fedora:30
-    command: /sbin/init
-    environment:
-      container: docker
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-    capabilities:
-      - SYS_ADMIN
-  - name: fedora-29
-    image: fedora:29
-    command: /sbin/init
-    environment:
-      container: docker
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-    capabilities:
-      - SYS_ADMIN
+    image: docker.io/fedora:30
+    pre_build_image: true
   - name: centos-8
-    image: centos:8
-    command: /sbin/init
-    environment:
-      container: docker
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-    capabilities:
-      - SYS_ADMIN
+    image: docker.io/centos:8
+    pre_build_image: true
 provisioner:
   name: ansible
 verifier:
-  name: testinfra
+  name: ansible

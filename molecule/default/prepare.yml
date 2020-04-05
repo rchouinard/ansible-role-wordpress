@@ -3,23 +3,16 @@
   hosts: all
   tasks:
 
-  - name: Install sudo
-    package:
-      name: sudo
-      state: present
-
-  - name: Install php
+  - name: Install required packages
     package:
       name:
       - php-cli
       - php-json
       - php-pdo
       - php-mysqlnd
+      - sudo
+      - mariadb
       state: present
-
-  - name: Install mysql client
-    package:
-      name: mariadb
 
   - name: Create document root
     file:

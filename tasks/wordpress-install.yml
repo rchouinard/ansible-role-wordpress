@@ -17,7 +17,7 @@
       --no-color
       --path={{ wp_path | quote }}
       --version={{ wp_version | quote }}
-      {{ "--skip-content" if wp_skip_content }}
+      {{ "--skip-content" if wp_skip_content else "" }}
     creates: "{{ wp_path }}/wp-settings.php"
 
 - name: Create WordPress configuration file
@@ -67,6 +67,6 @@
       --admin_user={{ wp_admin_user | quote }}
       --admin_password={{ wp_admin_password | quote }}
       --admin_email={{ wp_admin_email | quote }}
-      {{ "--skip-email" if wp_skip_email }}
+      {{ "--skip-email" if wp_skip_email else "" }}
   when: not wp_skip_install and wp_install_check.rc != 0
   run_once: yes

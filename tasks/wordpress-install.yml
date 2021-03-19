@@ -35,7 +35,7 @@
       --dbhost={{ wp_db_host | quote }}
       --dbprefix={{ wp_db_prefix | quote }}
       --dbcharset={{ wp_db_charset | quote }}
-      {{ "--skip-check" if wp_db_skip_check }}
+      {{ "--skip-check" if wp_db_skip_check else "" }}
     creates: "{{ wp_path }}/wp-config.php"
   when: not wp_skip_config
 
